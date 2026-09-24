@@ -55,150 +55,69 @@ public class Snake {
     }
 
     public void move(KeyEvent e) {
-
         // moving left to right
         Coordinate currentPos = this.head.getCoordinate();
         if (e.getKeyCode() == 37) { // left
             Coordinate des = new Coordinate(currentPos.getX(), currentPos.getY() - 1); // Calculating the snakes
-
-            if(isDead(des)){
-
-                board.resetBoard();
-                this.snakeCells.clear();// remove all the snake cells 
-                this.board.placeApple();
-                this.points = 0;
-                this.head = new SnakeCell(snakeLength);
-                this.head.setCoordinate(new Coordinate(5, 5));
-                this.snakeCells.add(head);
-                this.board.placeSnake(head.getCoordinate(), this.head);
+            if(isDead(des)){ // if the move is illegal
+               this.resetGame();
             }
-                                                                                      
-            else if (canMove(des, currentPos)) { // if the move is legal we can change the snakes coordinates
+            else { // if the move is legal we can change the snakes coordinates
                 if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName().equals("Apple")) {
-                    this.board.placeApple();// placing the new apple when the old one has been eating
-                    SnakeCell cell = new SnakeCell(snakeLength); // duplicating the head
-                    cell.setCoordinate(des); 
-                    this.board.placeSnake(des, cell);
-                    this.snakeCells.add(0, cell);
-                    this.head = this.snakeCells.get(0);
-                    this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
+                    this.appleEaten(des, currentPos);
                     this.points += 5;
-    
-                } else {
-                    
-
-                     // Correct code
-
-                    this.board.getBoard()[this.tail.getCoordinate().getX()][this.tail.getCoordinate().getY()].setObject(null);
-                    SnakeCell cell = new SnakeCell(snakeLength);
-                    cell.setCoordinate(des);
-                    this.snakeCells.remove(this.tail);
-                    // des = new Coordinate(this.head.getCoordinate().getX(),
-                    // this.head.getCoordinate().getY()-1);
-                    this.board.placeSnake(des, cell);
-                    this.snakeCells.add(0, cell);
-                    this.head = this.snakeCells.get(0);
-                    this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
-                    this.tail = this.snakeCells.get(this.snakeCells.size() - 1);
-                    tail.setCoordinate(this.snakeCells.get(this.snakeCells.size() - 1).getCoordinate());
-
+                } else { // move the snake 
+                    this.makeMove(des);
                 }
             }
         } else if (e.getKeyCode() == 39) { // right
             Coordinate des = new Coordinate(currentPos.getX(), currentPos.getY() + 1); // Calculating the snakes
             if(isDead(des)){
-
-                board.resetBoard();
-                this.snakeCells.clear();// remove all the snake cells 
-                this.board.placeApple();
-                this.points = 0;
-                this.head = new SnakeCell(snakeLength);
-                this.head.setCoordinate(new Coordinate(5, 5));
-                this.snakeCells.add(head);
-                this.board.placeSnake(head.getCoordinate(), this.head);
+                this.resetGame();
             }
-
-            else if(canMove(des, currentPos)){
+            else {
                 if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName()
                             .equals("Apple")) {
-                    this.board.placeApple();// placing the new apple when the old one has been eating
-                    SnakeCell cell = new SnakeCell(snakeLength); // duplicating the head
-                    cell.setCoordinate(des); 
-                    this.board.placeSnake(des, cell);
-                    this.snakeCells.add(0, cell);
-                    this.head = this.snakeCells.get(0);
-                    this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
-                    this.points += 5;
+                    this.appleEaten(des, currentPos);   
                     System.out.println(this.points);
-            } else {
-                this.board.getBoard()[this.tail.getCoordinate().getX()][this.tail.getCoordinate().getY()].setObject(null);
-                SnakeCell cell = new SnakeCell(snakeLength);
-                cell.setCoordinate(des);
-                this.snakeCells.remove(this.tail);
-                // des = new Coordinate(this.head.getCoordinate().getX(),
-                // this.head.getCoordinate().getY()-1);
-                this.board.placeSnake(des, cell);
-                this.snakeCells.add(0, cell);
-                this.head = this.snakeCells.get(0);
-                this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
-                this.tail = this.snakeCells.get(this.snakeCells.size() - 1);
-                tail.setCoordinate(this.snakeCells.get(this.snakeCells.size() - 1).getCoordinate());
-                
+                } else {
+                    this.makeMove(des);
+                }
             }
-                
-            }
-            
-
         } else if (e.getKeyCode() == 38) {// up
             Coordinate des = new Coordinate(currentPos.getX() - 1, currentPos.getY()); // Calculating the snakes
             if(isDead(des)){
-
-                board.resetBoard();
-                this.snakeCells.clear();// remove all the snake cells 
-                this.board.placeApple();
-                this.points = 0;
-                this.head = new SnakeCell(snakeLength);
-                this.head.setCoordinate(new Coordinate(5, 5));
-                this.snakeCells.add(head);
-                this.board.placeSnake(head.getCoordinate(), this.head);
+                this.resetGame();
             }
-    
-            else if(canMove(des, currentPos)){
+            else {
                 if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName()
                             .equals("Apple")) {
-                    this.board.placeApple();// placing the new apple when the old one has been eating
-                    SnakeCell cell = new SnakeCell(snakeLength); // duplicating the head
-                    cell.setCoordinate(des); 
-                    this.board.placeSnake(des, cell);
-                    this.snakeCells.add(0, cell);
-                    this.head = this.snakeCells.get(0);
-                    this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
-                    this.points += 5;
+                    this.appleEaten(des, currentPos);
                     System.out.println(this.points);
-            } else {
-                this.board.getBoard()[this.tail.getCoordinate().getX()][this.tail.getCoordinate().getY()].setObject(null);
-                SnakeCell cell = new SnakeCell(snakeLength);
-                cell.setCoordinate(des);
-                this.snakeCells.remove(this.tail);
-                // des = new Coordinate(this.head.getCoordinate().getX(),
-                // this.head.getCoordinate().getY()-1);
-                this.board.placeSnake(des, cell);
-                this.snakeCells.add(0, cell);
-                this.head = this.snakeCells.get(0);
-                this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
-                this.tail = this.snakeCells.get(this.snakeCells.size() - 1);
-                tail.setCoordinate(this.snakeCells.get(this.snakeCells.size() - 1).getCoordinate());
-                
+                } else {
+                    this.makeMove(des);
+                }
             }
-                
-            }
-            
-
         } else if (e.getKeyCode() == 40) { // down
             Coordinate des = new Coordinate(currentPos.getX() + 1, currentPos.getY()); // Calculating the snakes
             if(isDead(des)){
+                this.resetGame();
+            }
+            else {
+                if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName()
+                            .equals("Apple")) { // the appel was eaten 
+                    this.appleEaten(des, currentPos);
+                    System.out.println(this.points);
+                } else { // the apple was not eaten 
+                    this.makeMove(des);
+                }
+            }
+        }
+    }
 
-                board.resetBoard();
+    private void  resetGame(){
+
+        board.resetBoard();
                 this.snakeCells.clear();// remove all the snake cells 
                 this.board.placeApple();
                 this.points = 0;
@@ -206,12 +125,10 @@ public class Snake {
                 this.head.setCoordinate(new Coordinate(5, 5));
                 this.snakeCells.add(head);
                 this.board.placeSnake(head.getCoordinate(), this.head);
-            }
- 
-            else if(canMove(des, currentPos)){
-                if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName()
-                            .equals("Apple")) {
-                    this.board.placeApple();// placing the new apple when the old one has been eating
+    }
+
+    private void appleEaten(Coordinate des, Coordinate currentPos){
+        this.board.placeApple();// placing the new apple when the old one has been eating
                     SnakeCell cell = new SnakeCell(snakeLength); // duplicating the head
                     cell.setCoordinate(des); 
                     this.board.placeSnake(des, cell);
@@ -219,8 +136,9 @@ public class Snake {
                     this.head = this.snakeCells.get(0);
                     this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
                     this.points += 5;
-                    System.out.println(this.points);
-            } else {
+    }
+    private void makeMove(Coordinate des){
+
                 this.board.getBoard()[this.tail.getCoordinate().getX()][this.tail.getCoordinate().getY()].setObject(null);
                 SnakeCell cell = new SnakeCell(snakeLength);
                 cell.setCoordinate(des);
@@ -233,13 +151,6 @@ public class Snake {
                 this.head.setCoordinate(this.snakeCells.get(0).getCoordinate());
                 this.tail = this.snakeCells.get(this.snakeCells.size() - 1);
                 tail.setCoordinate(this.snakeCells.get(this.snakeCells.size() - 1).getCoordinate());
-                
-            }
-                
-            }// destination coordinates.
-            
-
-        }
 
     }
 
@@ -249,7 +160,13 @@ public class Snake {
          * Can be done by testing if we are tring to move to a certain position on the
          * grid tha t already contains a snake cell.
          */
-
+        // Check if snake hit the wall (out of bounds) FIRST
+        if(!isOutOfBound(des)){
+            this.isDead = true;
+            return true;
+        }
+        // Then check for collision with self
+        System.out.println("Cell is null: " + (this.board.getBoard()[des.getX()][des.getY()].getCell() != null));
         if (this.board.getBoard()[des.getX()][des.getY()].getCell() != null
                 && this.board.getBoard()[des.getX()][des.getY()].getCell().getClass().getSimpleName()
                         .equals("SnakeCell")) {
