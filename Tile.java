@@ -10,13 +10,7 @@ public class Tile {
 
     }
 
-    public int getX() {
-        return x;
-    }
 
-    public int getY() {
-        return y;
-    }
 
     public Object getCell() {
         return cell;

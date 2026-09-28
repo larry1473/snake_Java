@@ -1,8 +1,6 @@
-import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import java.awt.GridBagConstraints;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -73,14 +71,10 @@ public class Game extends JFrame implements KeyListener {
 
 
 
-
         }
-        stop();
+        
 
 
-    }
-
-    private void stop() {
     }
 
     private void tick(){
@@ -156,7 +150,6 @@ public class Game extends JFrame implements KeyListener {
 
         }
 
-
         
     }
 
@@ -203,7 +196,6 @@ public class Game extends JFrame implements KeyListener {
                 }
                 
 
-                
 
             }
             else if(boardGame[this.coordinate.getX()][this.coordinate.getY()].getCell() != null && boardGame[this.coordinate.getX()][this.coordinate.getY()].getCell().getClass().getSimpleName().equals("Apple")){

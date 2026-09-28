@@ -79,9 +79,11 @@ public class Board {
 
     public static Board getBoardInstance(){
         if(instance == null){
-            instance = new Board();
-            System.out.println(instance);
-            return instance;
+            synchronized(Board.class){
+                if (instance == null) {
+                    instance = new Board();
+                }
+            }
         }
         return instance;
     }
